@@ -1,12 +1,13 @@
 // src/App.js
 import React from "react";
-import { Button } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
+import { Chat } from "./components/Chat";
 
 function App() {
   return (
-    <div style={{ padding: "20px" }}>
-      <Button colorScheme="teal">Hello, Chakra!</Button>
-    </div>
+    <Box minH={"100vh"}>
+      <Chat></Chat>
+    </Box>
   );
 }
 
