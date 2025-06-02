@@ -8,11 +8,8 @@ export const register = async (req, res) => {
   const { username, email, password } = req.body;
   try {
     // Check if user exists with either username or email
-    const existingUser = await User.findOne({ 
-      $or: [
-        { username: username },
-        { email: email }
-      ]
+    const existingUser = await User.findOne({
+      $or: [{ username: username }, { email: email }],
     });
 
     if (existingUser) {
@@ -36,5 +33,22 @@ export const register = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Server Error");
+  }
+};
+export const login = async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    let user = await User.findOne({ username });
+    if (!user) return res.status(400).json({ msg: "Invalid Credentials" });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ msg: "Invalis Credentials" });
+    const payload = { userId: user.id };
+    const token = jsonwebtoken.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    res.json({ token });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
   }
 };
