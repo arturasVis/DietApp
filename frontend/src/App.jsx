@@ -4,6 +4,7 @@ import { Box } from "@chakra-ui/react";
 import { Chat } from "./components/Chat";
 import { Routes, Route } from "react-router-dom";
 import { Login } from "./components/login";
+import { Register } from "./components/register";
 function App() {
   const [messages, setMessages] = useState([]);
 
@@ -18,6 +19,7 @@ function App() {
           path="/chat"
           element={<Chat messages={messages} onNewMessage={handleNewMessage} />}
         />
+        <Route path="/register" element={<Register />} />
         <Route path="/" element={<Login />} />
       </Routes>
     </Box>

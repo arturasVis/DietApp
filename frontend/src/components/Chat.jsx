@@ -1,7 +1,7 @@
 import { Box, Button, HStack, Textarea, VStack } from "@chakra-ui/react";
 import { Message } from "./message";
-import useTextAreaStore from "../../stores/useTextAreaStore";
-import { useChatGPTStore } from "../../stores/chat.store";
+import useTextAreaStore from "../stores/useTextAreaStore";
+import { useChatGPTStore } from "../stores/chat.store";
 /*export const Chat = () => { 
  * example of calling an api with fetch
   const [data, setData] = useState(null);
@@ -59,19 +59,14 @@ export const Chat = ({ messages = [], onNewMessage }) => {
   };
 
   return (
-    <Box 
-      h="100vh" 
-      maxH="100vh" 
-      padding={"20px"} 
-      display="flex" 
+    <Box
+      h="100vh"
+      maxH="100vh"
+      padding={"20px"}
+      display="flex"
       flexDirection="column"
     >
-      <VStack 
-        flex={1} 
-        spacing={4} 
-        maxH="calc(100vh - 40px)" 
-        overflow="hidden"
-      >
+      <VStack flex={1} spacing={4} maxH="calc(100vh - 40px)" overflow="hidden">
         <Box
           width={"50%"}
           maxWidth={"50%"}

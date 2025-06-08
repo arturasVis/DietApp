@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { PasswordInput } from "./ui/password-input";
-import { LoginStore } from "../../stores/logins.store";
+import { LoginStore } from "../stores/logins.store";
 import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
@@ -20,26 +20,35 @@ export const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm(); // No generic type parameter
-  const LoginAction = LoginStore((state) => state.LoginStore);
-  const SubmitToken = LoginStore((state) => state.SubmitToken);
-  const onSubmit = handleSubmit((data) => {
-    const token = LoginAction(data.username, data.password);
-    if (!token) throw new Error("Wrong");
-    SubmitToken(token);
-    navigate("/chat");
+  } = useForm();
+
+  const login = LoginStore((state) => state.login);
+  const isLoading = LoginStore((state) => state.isLoading);
+  const error = LoginStore((state) => state.error);
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const token = await login(data.username, data.password);
+      if (token) {
+        navigate("/chat");
+      }
+    } catch (error) {
+      // Error is handled in the store
+      console.error("Login failed:", error);
+    }
   });
 
   return (
     <Box
-      display={"flex"}
-      flexDirection={"column"}
+      display="flex"
+      flexDirection="column"
       padding={20}
-      justifyContent={"Center"}
-      alignItems={"center"}
+      justifyContent="center"
+      alignItems="center"
     >
-      <form onSubmit={onSubmit} flex={1}>
+      <form onSubmit={onSubmit}>
         <Stack spacing={4} maxW="sm">
+          {/* Username Field */}
           <FormControl isInvalid={!!errors.username}>
             <FormLabel>Username</FormLabel>
             <Input
@@ -74,11 +83,29 @@ export const Login = () => {
             </FormErrorMessage>
           </FormControl>
 
+          {/* Error Message */}
+          {error && (
+            <FormControl isInvalid>
+              <FormErrorMessage>{error}</FormErrorMessage>
+            </FormControl>
+          )}
+
           {/* Submit Button */}
-          <Button type="submit" colorScheme="teal">
-            Submit
+          <Button
+            type="submit"
+            colorScheme="teal"
+            isLoading={isLoading}
+            loadingText="Logging in..."
+          >
+            Login
           </Button>
-          <Button colorScheme="teal">Register</Button>
+          <Button
+            colorScheme="teal"
+            variant="outline"
+            onClick={() => navigate("/register")}
+          >
+            Register
+          </Button>
         </Stack>
       </form>
     </Box>
