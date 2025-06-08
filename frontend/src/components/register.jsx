@@ -8,12 +8,15 @@ import {
   Input,
   FormErrorMessage,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { PasswordInput } from "./ui/password-input";
+import { RegisterStore } from "../stores/register.store.js";
 
 export const Register = () => {
+  const toast = useToast();
   const navigate = useNavigate();
   const {
     register,
@@ -21,11 +24,27 @@ export const Register = () => {
     watch,
     formState: { errors },
   } = useForm();
+  const registerStore = RegisterStore((state) => state.register);
+  const error = RegisterStore((state) => state.error);
   const password = watch("password", "");
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log(data);
-      navigate("/login");
+      const success = await registerStore(
+        data.username,
+        data.email,
+        data.password,
+      );
+      if (success) {
+        navigate("/");
+      } else if (error) {
+        toast({
+          title: "Registration failed",
+          description: error,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
     } catch (error) {
       console.error("Registration failed: ", error);
     }
