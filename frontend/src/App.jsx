@@ -5,6 +5,7 @@ import { Chat } from "./components/Chat";
 import { Routes, Route } from "react-router-dom";
 import { Login } from "./components/login";
 import { Register } from "./components/register";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 function App() {
   const [messages, setMessages] = useState([]);
 
@@ -17,7 +18,11 @@ function App() {
       <Routes>
         <Route
           path="/chat"
-          element={<Chat messages={messages} onNewMessage={handleNewMessage} />}
+          element={
+            <ProtectedRoute>
+              <Chat messages={messages} onNewMessage={handleNewMessage} />
+            </ProtectedRoute>
+          }
         />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Login />} />
