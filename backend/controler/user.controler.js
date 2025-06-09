@@ -37,18 +37,30 @@ export const register = async (req, res) => {
 };
 export const login = async (req, res) => {
   const { username, password } = req.body;
+  
+  if (!username || !password) {
+    return res.status(400).json({ msg: "Please provide both username and password" });
+  }
+
   try {
     let user = await User.findOne({ username });
-    if (!user) return res.status(400).json({ msg: "Invalid Credentials" });
+    if (!user) {
+      return res.status(400).json({ msg: "Invalid credentials" });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalis Credentials" });
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Invalid credentials" });
+    }
+
     const payload = { userId: user.id };
     const token = jsonwebtoken.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
+
     res.json({ token });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server error");
+    console.error("Login error:", error.message);
+    res.status(500).json({ msg: "Server error" });
   }
 };
