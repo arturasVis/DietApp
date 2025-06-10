@@ -1,5 +1,3 @@
-import mongoose from "mongoose";
-import axios from "axios";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
@@ -35,11 +33,14 @@ export const register = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
 export const login = async (req, res) => {
   const { username, password } = req.body;
-  
+
   if (!username || !password) {
-    return res.status(400).json({ msg: "Please provide both username and password" });
+    return res
+      .status(400)
+      .json({ msg: "Please provide both username and password" });
   }
 
   try {

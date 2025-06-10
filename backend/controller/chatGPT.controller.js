@@ -1,4 +1,3 @@
-import express from "express";
 import dotenv from "dotenv";
 import axios from "axios";
 import Message from "../models/chat.model.js";
@@ -97,4 +96,4 @@ export const getChatHistory = async (req, res) => {
     console.error("Error fetching chat history:", error);
     res.status(500).json({ error: "Failed to fecth chat history" });
   }
-}; 
+};
