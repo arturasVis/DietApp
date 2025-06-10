@@ -97,4 +97,4 @@ export const getChatHistory = async (req, res) => {
     console.error("Error fetching chat history:", error);
     res.status(500).json({ error: "Failed to fecth chat history" });
   }
-};
+}; 
