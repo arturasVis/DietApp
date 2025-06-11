@@ -4,6 +4,7 @@ import cors from "cors";
 import chatRoutes from "./routes/chatGPT.route.js";
 import userRoutes from "./routes/user.route.js";
 import foodRoutes from "./routes/food.route.js";
+import mealRoutes from "./routes/meal.route.js";
 import { connectDB } from "./config/db.js";
 
 const app = express();
@@ -28,6 +29,7 @@ app.get("/", (req, res) => {
 app.use("/api/chat", chatRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/food", foodRoutes);
+app.use("/api/meal", mealRoutes);
 
 // Start the Server
 const PORT = process.env.PORT || 5000;

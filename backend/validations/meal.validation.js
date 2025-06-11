@@ -68,4 +68,26 @@ export const validateUpdateMeal = [
     }
     next();
   }
+];
+
+export const validateAddFoodToMeal = [
+  body('food')
+    .notEmpty().withMessage('Food ID is required')
+    .isMongoId().withMessage('Invalid food ID'),
+  
+  body('quantity')
+    .notEmpty().withMessage('Quantity is required')
+    .isFloat({ min: 0 }).withMessage('Quantity must be a positive number'),
+  
+  body('servingSize')
+    .notEmpty().withMessage('Serving size is required')
+    .isFloat({ min: 0 }).withMessage('Serving size must be a positive number'),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  }
 ]; 
